@@ -8,6 +8,7 @@ git clone https://github.com/fecabrera/drf-boilerplate.git
 # Installing dependencies
 cd drf-boilerplate
 pipenv install --dev
+pipenv shell
 
 # Preparing the environment
 cp .env.example .env
