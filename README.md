@@ -10,6 +10,7 @@ Includes:
 * Support for CORS and CSRF
 * Support for S3/DigitalOcean storage
 * Popular libraries (complete list in [Pipfile](Pipfile), you can always comment the ones you don't need 🙃)
+* Coverage reports
 
 ## Quickstart
 
@@ -30,6 +31,22 @@ docker-compose up -d  # starts the development database
 ### Running the server
 ```bash
 python manage.py runserver
+``` 
+
+## Testing
+
+### Unit tests
+
+```bash
+python manage.py test
+```
+### Coverage report
+
+See [.coveragerc](.coveragerc) for the configuration.
+
+```bash
+coverage run manage.py test
+coverage report  # will fail if coverage < 95%, can be changed in .coveragerc
 ```
 
 ## Documentation
