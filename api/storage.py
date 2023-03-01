@@ -21,7 +21,7 @@ class PrivateMediaStorage(S3Boto3Storage):
     custom_domain = False
 
 
-if settings.TESTING:
+if settings.UNITTEST:
     static_storage = default_storage
     media_storage = default_storage
     private_media_storage = default_storage

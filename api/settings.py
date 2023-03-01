@@ -30,10 +30,11 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-u2f8rbsoedjjz4q&tmr8(
 DEBUG = config('DEBUG', default=True, cast=bool)
 ENVIRONMENT = config('ENVIRONMENT', default="test")
 
-TESTING = config('TESTING', default=ENVIRONMENT == "test")
-DEVELOPMENT = config('DEVELOPMENT', default=ENVIRONMENT == "dev")
+# TODO: deprecate "test", "dev" and "prod" in favor of "unittest", "development" and "production"
+UNITTEST = config('TESTING', default=ENVIRONMENT == "unittest" or ENVIRONMENT == "test")
+DEVELOPMENT = config('DEVELOPMENT', default=ENVIRONMENT == "development" or ENVIRONMENT == "dev")
 STAGING = config('STAGING', default=ENVIRONMENT == "staging")
-PRODUCTION = config('PRODUCTION', default=ENVIRONMENT == "prod")
+PRODUCTION = config('PRODUCTION', default=ENVIRONMENT == "production" or ENVIRONMENT == "prod")
 
 DB_CONFIG = parse_db_url(url=config('DATABASE_URL', default=None))
 
@@ -164,7 +165,7 @@ PRIVATE_MEDIA_LOCATION = config('PRIVATE_MEDIA_LOCATION', default='private')
 # Static and user uploaded files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-if TESTING:
+if UNITTEST:
     STATIC_URL = '%s/' % STATIC_LOCATION
     STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -185,7 +186,7 @@ else:
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=lambda v: [s.strip() for s in v.split(',') if s and s.strip()])
 
-if TESTING or DEVELOPMENT:
+if UNITTEST or DEVELOPMENT:
     CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='', cast=lambda v: [s.strip() for s in v.split(',') if s and s.strip()])
