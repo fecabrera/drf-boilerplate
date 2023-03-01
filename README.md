@@ -122,7 +122,7 @@ Suitable for staging and product testing.
 
 ```bash
 # .env
-DEBUG=False
+DEBUG=True
 ENVIRONMENT=staging
 
 AWS_ACCESS_KEY_ID=<aws_access_key>
