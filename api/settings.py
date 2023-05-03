@@ -197,12 +197,12 @@ CORS_EXPOSE_HEADERS = ['set-cookie']
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='', cast=lambda v: [s.strip() for s in v.split(',') if s and s.strip()])
 
 SESSION_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_DOMAIN = config('SESSION_COOKIE_DOMAIN', default=None)
+SESSION_COOKIE_SECURE = bool(SESSION_COOKIE_DOMAIN)
 
 CSRF_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_DOMAIN = config('CSRF_COOKIE_DOMAIN', default=None)
+CSRF_COOKIE_SECURE = bool(CSRF_COOKIE_DOMAIN)
 
 
 # Default primary key field type
