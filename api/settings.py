@@ -165,7 +165,7 @@ PRIVATE_MEDIA_LOCATION = config('PRIVATE_MEDIA_LOCATION', default='private')
 # Static and user uploaded files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-if UNITTEST:
+if UNITTEST or DEVELOPMENT:
     STATIC_URL = '%s/' % STATIC_LOCATION
     STATIC_ROOT = BASE_DIR / 'staticfiles'
 
