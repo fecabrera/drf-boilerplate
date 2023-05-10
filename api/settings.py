@@ -173,10 +173,10 @@ if UNITTEST or DEVELOPMENT:
     MEDIA_ROOT = BASE_DIR / 'mediafiles'
 else:
     STATIC_URL = '%s/%s/' % (AWS_S3_ENDPOINT_URL, STATIC_LOCATION)
-    STATICFILES_STORAGE = 'api.storage.StaticStorage'
+    STATICFILES_STORAGE = 'api.utils.storage.StaticStorage'
 
     MEDIA_URL = '%s/%s/' % (AWS_S3_ENDPOINT_URL, MEDIA_LOCATION)
-    DEFAULT_FILE_STORAGE = 'api.storage.MediaStorage'
+    DEFAULT_FILE_STORAGE = 'api.utils.storage.MediaStorage'
 
 # STATICFILES_DIRS = (BASE_DIR / 'static', )
 
