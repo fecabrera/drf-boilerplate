@@ -1,28 +1,26 @@
-from django.conf import settings
+import pycountry
+import phonenumbers
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from api.framework.phone_numbers import PhoneNumber
+
 
 def validate_country_code(value):
-    import pycountry
-
     country = pycountry.countries.get(alpha_2=value)
 
     if not country:
         raise ValidationError(_("Invalid country code."))
 
-    return country.alpha_2
-
 
 def validate_phone_number(value):
-    import phonenumbers
-
     try:
-        number = phonenumbers.parse(value, settings.PHONE_NUMBER_DEFAULT_REGION)
+        number = PhoneNumber(value)
     except phonenumbers.phonenumberutil.NumberParseException:
         raise ValidationError(_("Invalid phone number."))
 
-    if not phonenumbers.is_valid_number(number):
+    if not number.is_valid():
         raise ValidationError(_("Invalid phone number."))
 
-    return str(number.country_code) + str(number.national_number)
+    if value != number.cleaned():
+        raise ValidationError(_("Invalid phone number."))

@@ -7,14 +7,14 @@ from api.utils.validators import validate_country_code
 
 class TestValidateCountryCode(APITestCase):
     def test_validate_country_code(self):
-        self.assertEqual(validate_country_code('US'), 'US')
-        self.assertEqual(validate_country_code('CA'), 'CA')
-        self.assertEqual(validate_country_code('Cl'), 'CL')
+        validate_country_code('US')
+        validate_country_code('CA')
+        validate_country_code('Cl')
 
     def test_validate_country_code_lowercase(self):
-        self.assertEqual(validate_country_code('us'), 'US')
-        self.assertEqual(validate_country_code('cA'), 'CA')
-        self.assertEqual(validate_country_code('CL'), 'CL')
+        validate_country_code('us')
+        validate_country_code('cA')
+        validate_country_code('CL')
 
     def test_validate_country_code_invalid(self):
         with self.assertRaises(ValidationError) as e:
