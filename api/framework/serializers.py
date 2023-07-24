@@ -5,10 +5,18 @@ from api.framework.phone_numbers import PhoneNumber
 from django.utils.translation import gettext_lazy as _
 
 
-class Serializer(Serializer):
+class RequestMixin:
     @property
     def request(self):
         return self.context['request']
+
+
+class Serializer(Serializer, RequestMixin):
+    pass
+
+
+class ModelSerializer(ModelSerializer, RequestMixin):
+    pass
 
 
 class PhoneNumberField(CharField):
