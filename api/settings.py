@@ -26,21 +26,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-u2f8rbsoedjjz4q&tmr8(i_qk&@j-wv^6vmvrmw+&)@oyzmpzu')
 
+# Environments
+ENVIRONMENT_UNITTEST = "unittest"
+ENVIRONMENT_DEVELOPMENT = "development"
+ENVIRONMENT_STAGING = "staging"
+ENVIRONMENT_PRODUCTION = "production"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
-ENVIRONMENT = config('ENVIRONMENT', default="test")
+ENVIRONMENT = config('ENVIRONMENT', default=ENVIRONMENT_UNITTEST)
 
-# TODO: deprecate "test", "dev" and "prod" in favor of "unittest", "development" and "production"
-UNITTEST = config('TESTING', default=ENVIRONMENT == "unittest" or ENVIRONMENT == "test")
-DEVELOPMENT = config('DEVELOPMENT', default=ENVIRONMENT == "development" or ENVIRONMENT == "dev")
-STAGING = config('STAGING', default=ENVIRONMENT == "staging")
-PRODUCTION = config('PRODUCTION', default=ENVIRONMENT == "production" or ENVIRONMENT == "prod")
-
-DB_CONFIG = parse_db_url(url=config('DATABASE_URL', default=None))
-
+# Feature flags
+DISABLE_S3_DO_STORAGE = config('DISABLE_S3_DO_STORAGE', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT))
+DISABLE_CORS = config('DISABLE_CORS', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT))
+DISABLE_CSRF = config('DISABLE_CSRF', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT))
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+DB_CONFIG = parse_db_url(url=config('DATABASE_URL', default=None))
 
 DATABASES = {
     'default': {
@@ -85,7 +88,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware' if PRODUCTION or STAGING else 'api.middleware.DisableCSRFMiddleware',
+    'api.middleware.DisableCSRFMiddleware' if DISABLE_CSRF else 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -167,7 +170,7 @@ PRIVATE_MEDIA_LOCATION = config('PRIVATE_MEDIA_LOCATION', default='private')
 # Static and user uploaded files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-if UNITTEST or DEVELOPMENT:
+if DISABLE_S3_DO_STORAGE:
     STATIC_URL = '%s/' % STATIC_LOCATION
     STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -188,7 +191,7 @@ else:
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=lambda v: [s.strip() for s in v.split(',') if s and s.strip()])
 
-if UNITTEST or DEVELOPMENT:
+if DISABLE_CORS:
     CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='', cast=lambda v: [s.strip() for s in v.split(',') if s and s.strip()])

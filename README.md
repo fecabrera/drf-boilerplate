@@ -58,26 +58,29 @@ There's two ways to set environment variables:
 
 ### List of variables
 
-| Variable                | Description                                 | Values                                               | Default |
-|-------------------------|---------------------------------------------|------------------------------------------------------|---------|
-| DEBUG                   | Whether Django should show debug messages   | `True` or `False`                                    | `True`  |
-| ENVIRONMENT             | The environment to work on                  | `unittest`, `development`, `staging` or `production` | `test`  |
-| AWS_ACCESS_KEY_ID       |                                             | String                                               | `None`  |
-| AWS_SECRET_ACCESS_KEY   |                                             | String                                               | `None`  |
-| AWS_STORAGE_BUCKET_NAME |                                             | String                                               | `None`  |
-| AWS_S3_REGION_NAME      |                                             | String                                               | `None`  |
-| DATABASE_URL            | The URL to the database                     | URL                                                  |         |
-| POSTGRES_DB             | The name of the database                    | String                                               |         |
-| POSTGRES_USER           | The name of the database user               | String                                               |         |
-| POSTGRES_PASSWORD       | The password of the database user           | String                                               |         |
-| POSTGRES_HOST           | The host of the database                    | String                                               |         |
-| POSTGRES_PORT           | The port of the database                    | String                                               |         |
-| POSTGRES_TEST_DB        | The name of the test database               | String                                               | `test`  |
-| ALLOWED_HOSTS           | A list of allowed domains                   | Comma separated hosts                                |         |
-| CORS_ALLOWED_ORIGINS    | A list of trusted origins for CORS requests | Comma separated URLs                                 |         |
-| CSRF_TRUSTED_ORIGINS    | A list of trusted origins for CSRF requests | Comma separated URLs                                 |         |
-| SESSION_COOKIE_DOMAIN   | The domain for the session cookie           | String                                               | `None`  |
-| CSRF_COOKIE_DOMAIN      | The domain for the CSRF cookie              | String                                               | `None`  |
+| Variable                | Description                                 | Values                                               | Default    |
+|-------------------------|---------------------------------------------|------------------------------------------------------|------------|
+| DEBUG                   | Whether Django should show debug messages   | `True` or `False`                                    | `True`     |
+| ENVIRONMENT             | The environment to work on                  | `unittest`, `development`, `staging` or `production` | `unittest` |
+| AWS_ACCESS_KEY_ID       |                                             | String                                               | `None`     |
+| AWS_SECRET_ACCESS_KEY   |                                             | String                                               | `None`     |
+| AWS_STORAGE_BUCKET_NAME |                                             | String                                               | `None`     |
+| AWS_S3_REGION_NAME      |                                             | String                                               | `None`     |
+| DATABASE_URL            | The URL to the database                     | URL                                                  |            |
+| POSTGRES_DB             | The name of the database                    | String                                               |            |
+| POSTGRES_USER           | The name of the database user               | String                                               |            |
+| POSTGRES_PASSWORD       | The password of the database user           | String                                               |            |
+| POSTGRES_HOST           | The host of the database                    | String                                               |            |
+| POSTGRES_PORT           | The port of the database                    | String                                               |            |
+| POSTGRES_TEST_DB        | The name of the test database               | String                                               | `test`     |
+| DISABLE_S3_DO_STORAGE   | Explicitly disables S3/DigitalOcean storage | `True` or `False`                                    |            |
+| DISABLE_CORS            | Explicitly disables CORS                    | `True` or `False`                                    |            |
+| DISABLE_CSRF            | Explicitly disables CSRF                    | `True` or `False`                                    |            |
+| ALLOWED_HOSTS           | A list of allowed domains                   | Comma separated hosts                                |            |
+| CORS_ALLOWED_ORIGINS    | A list of trusted origins for CORS requests | Comma separated URLs                                 |            |
+| CSRF_TRUSTED_ORIGINS    | A list of trusted origins for CSRF requests | Comma separated URLs                                 |            |
+| SESSION_COOKIE_DOMAIN   | The domain for the session cookie           | String                                               | `None`     |
+| CSRF_COOKIE_DOMAIN      | The domain for the CSRF cookie              | String                                               | `None`     |
 
 ### Examples
 
