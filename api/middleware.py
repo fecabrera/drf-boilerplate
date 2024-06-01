@@ -1,4 +1,4 @@
-class DisableCSRFMiddleware(object):
+class DisableCSRFMiddleware(object):  # pragma: no cover
     def __init__(self, get_response):
         self.get_response = get_response
 

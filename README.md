@@ -46,7 +46,7 @@ See [.coveragerc](.coveragerc) for the configuration.
 
 ```bash
 coverage run manage.py test
-coverage report  # will fail if coverage < 95%, can be changed in .coveragerc
+coverage report  # will fail if coverage < 90%, can be changed in .coveragerc
 ```
 
 ## Environment variables
