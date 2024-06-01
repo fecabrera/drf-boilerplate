@@ -19,4 +19,4 @@ class TestValidateCountryCode(TestCase):
     def test_validate_country_code_invalid(self):
         with self.assertRaises(ValidationError) as e:
             validate_country_code('XX')
-            self.assertEqual(e.exception.detail, _('Invalid country code.'))
+        self.assertEqual(e.exception.message, _('Invalid country code.'))

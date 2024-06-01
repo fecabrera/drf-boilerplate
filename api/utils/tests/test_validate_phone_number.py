@@ -16,16 +16,16 @@ class TestValidatePhoneNumber(TestCase):
     def test_validate_phone_number_not_clean(self, mock_is_valid_number):
         with self.assertRaises(ValidationError) as e:
             validate_phone_number('+1 202-555-0104')
-            self.assertEqual(e.exception.detail, _('Invalid phone number.'))
+        self.assertEqual(e.exception.message, _('Invalid phone number.'))
 
     @mock.patch('phonenumbers.is_valid_number', return_value=False)
     def test_validate_phone_number_invalid(self, mock_is_valid_number):
         with self.assertRaises(ValidationError) as e:
             validate_phone_number('+1 202-555-0104')
-            self.assertEqual(e.exception.detail, _('Invalid phone number.'))
+        self.assertEqual(e.exception.message, _('Invalid phone number.'))
 
     @mock.patch('phonenumbers.parse', side_effect=InvalidPhoneNumber)
     def test_validate_phone_number_wrong_format(self, mock_parse):
         with self.assertRaises(ValidationError) as e:
             validate_phone_number('202-555-0104')
-            self.assertEqual(e.exception.detail, _('Invalid phone number.'))
+        self.assertEqual(e.exception.message, _('Invalid phone number.'))
