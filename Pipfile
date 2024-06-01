@@ -25,6 +25,7 @@ mock = "*"
 
 [dev-packages]
 coverage = "*"
+ruff = "*"
 
 [requires]
 python_version = "3.12"
