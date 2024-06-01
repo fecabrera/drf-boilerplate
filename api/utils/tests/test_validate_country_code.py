@@ -1,11 +1,11 @@
-from rest_framework.test import APITestCase
+from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from api.utils.validators import validate_country_code
 
 
-class TestValidateCountryCode(APITestCase):
+class TestValidateCountryCode(TestCase):
     def test_validate_country_code(self):
         validate_country_code('US')
         validate_country_code('CA')

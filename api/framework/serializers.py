@@ -1,14 +1,36 @@
 import phonenumbers
 from rest_framework.serializers import *  # noqa
-
-from api.framework.phone_numbers import PhoneNumber
 from django.utils.translation import gettext_lazy as _
+from api.framework.phone_numbers import PhoneNumber
 
 
 class RequestMixin:
     @property
     def request(self):
+        assert 'request' in self.context, (
+            "'%s' should be instantiated with a request in the context."
+            % self.__class__.__name__
+        )
+
         return self.context['request']
+
+    @property
+    def format(self):
+        assert 'format' in self.context, (
+            "'%s' should be instantiated with a format in the context."
+            % self.__class__.__name__
+        )
+
+        return self.context['format']
+
+    @property
+    def view(self):
+        assert 'view' in self.context, (
+            "'%s' should be instantiated with a view in the context."
+            % self.__class__.__name__
+        )
+
+        return self.context['view']
 
 
 class Serializer(Serializer, RequestMixin):
