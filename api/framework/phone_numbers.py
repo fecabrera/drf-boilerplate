@@ -21,6 +21,10 @@ class PhoneNumber(object):
         self.number = value
 
     @property
+    def default_region(self):
+        return self._default_region
+
+    @property
     def format(self):
         return self._format
 

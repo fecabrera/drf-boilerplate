@@ -1,7 +1,7 @@
 import phonenumbers
 from rest_framework.serializers import *  # noqa
 from django.utils.translation import gettext_lazy as _
-from api.framework.phone_numbers import PhoneNumber
+from api.framework.phone_numbers import PhoneNumber, InvalidPhoneNumber
 
 
 class RequestMixin:
@@ -49,7 +49,7 @@ class PhoneNumberField(CharField):
     def to_internal_value(self, data):
         try:
             number = PhoneNumber(data)
-        except phonenumbers.phonenumberutil.NumberParseException:
+        except InvalidPhoneNumber:
             self.fail('invalid', value=data)
         else:
             if number.is_valid():

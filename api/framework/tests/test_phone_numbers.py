@@ -19,7 +19,7 @@ class TestPhoneNumber(TestCase):
     def test_number(self):
         number = PhoneNumber('+1 (202) 555-0104', default_region='US')
         self.assertEqual(number.raw_number, '+1 (202) 555-0104')
-        self.assertEqual(number.number, phonenumbers.parse('+1 (202) 555-0104', 'US'))
+        self.assertEqual(number.number, phonenumbers.parse(number.raw_number, number.default_region))
 
     def test_invalid_number(self):
         with self.assertRaises(InvalidPhoneNumber):
@@ -33,10 +33,8 @@ class TestPhoneNumber(TestCase):
     def test_is_invalid(self, mock_is_valid_number):
         self.assertFalse(self.number.is_valid())
 
-    @mock.patch('phonenumbers.format_number', return_value='+12025550104')
-    def test_cleaned(self, mock_format_number):
-        self.assertEqual(self.number.cleaned(), '+12025550104')
+    def test_cleaned(self):
+        self.assertEqual(self.number.cleaned(), phonenumbers.format_number(self.number.number, self.number.format))
 
-    @mock.patch('phonenumbers.format_number', return_value='+12025550104')
-    def test_str(self, mock_format_number):
-        self.assertEqual(str(self.number), '+12025550104')
+    def test_str(self):
+        self.assertEqual(str(self.number), phonenumbers.format_number(self.number.number, self.number.format))
