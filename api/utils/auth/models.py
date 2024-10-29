@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class BaseUser(AbstractBaseUser, PermissionsMixin):  # pragma: no cover
     email = models.EmailField(_('email'), unique=True, db_index=True)
     is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = EMAIL_FIELD
