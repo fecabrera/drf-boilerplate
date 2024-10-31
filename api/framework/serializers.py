@@ -1,4 +1,3 @@
-import phonenumbers
 from rest_framework.serializers import *  # noqa
 from django.utils.translation import gettext_lazy as _
 from api.framework.phone_numbers import PhoneNumber, InvalidPhoneNumber
