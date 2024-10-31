@@ -9,6 +9,8 @@ class ListModelMixin:
         query_params = self.get_query_params_serializer(data=request.query_params)
         query_params.is_valid(raise_exception=True)
 
+        self.query_params = query_params.validated_data
+
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
