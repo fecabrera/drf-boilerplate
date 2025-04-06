@@ -1,5 +1,3 @@
-from django.conf import settings
-from django.core.files.storage import default_storage
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
@@ -19,13 +17,3 @@ class PrivateMediaStorage(S3Boto3Storage):
     default_acl = 'private'
     file_overwrite = False
     custom_domain = False
-
-
-if settings.UNITTEST:
-    static_storage = default_storage
-    media_storage = default_storage
-    private_media_storage = default_storage
-else:
-    static_storage = StaticStorage()
-    media_storage = MediaStorage()
-    private_media_storage = PrivateMediaStorage()
