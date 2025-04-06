@@ -135,7 +135,7 @@ AWS_S3_REGION_NAME=<aws_region_name>
 
 DATABASE_URL=<postgres://user:password@host:port/dbname>
 
-ALLOWED_HOSTS=https://example.com,https://www.example.com
+ALLOWED_HOSTS=.example.com
 
 CORS_ALLOWED_ORIGINS=https://example.com,https://www.example.com
 CSRF_TRUSTED_ORIGINS=https://example.com,https://www.example.com
@@ -160,7 +160,7 @@ AWS_S3_REGION_NAME=<aws_region_name>
 
 DATABASE_URL=<postgres://user:password@host:port/dbname>
 
-ALLOWED_HOSTS=https://example.com,https://www.example.com
+ALLOWED_HOSTS=.example.com
 
 CORS_ALLOWED_ORIGINS=https://example.com,https://www.example.com
 CSRF_TRUSTED_ORIGINS=https://example.com,https://www.example.com
