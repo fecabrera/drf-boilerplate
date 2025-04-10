@@ -76,6 +76,15 @@ class APIView(APIView):
 
         return self.query_params_serializer_class
 
+    def get_query_params_serializer(self, *args, **kwargs):
+        """
+        Return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        """
+        serializer_class = self.get_query_params_serializer_class()
+        kwargs.setdefault('context', self.get_serializer_context())
+        return serializer_class(*args, **kwargs)
+
     def get_serializer_context(self):
         """
         Extra context provided to the serializer class.
