@@ -7,6 +7,9 @@ class APIView(APIView):
     serializer_class = None
     query_params_serializer_class = None
 
+    # The filter backend classes to use for queryset filtering
+    filter_backends = api_settings.DEFAULT_FILTER_BACKENDS
+
     def get_queryset(self):
         """
         Get the list of items for this view.
@@ -94,3 +97,16 @@ class APIView(APIView):
             'format': self.format_kwarg,
             'view': self
         }
+
+    def filter_queryset(self, queryset):
+        """
+        Given a queryset, filter it with whichever filter backend is in use.
+
+        You are unlikely to want to override this method, although you may need
+        to call it either from a list view, or from a custom `get_object`
+        method if you want to apply the configured filtering backend to the
+        default queryset.
+        """
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, self)
+        return queryset
