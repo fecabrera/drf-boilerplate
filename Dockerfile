@@ -23,6 +23,8 @@ RUN useradd --create-home --shell /bin/bash appuser
 WORKDIR /home/appuser
 USER appuser
 
-COPY . .
+COPY --chown=appuser:appuser . .
+
+RUN django-admin compilemessages
 
 CMD ["gunicorn", "--worker-tmp-dir", "/dev/shm", "api.wsgi"]
