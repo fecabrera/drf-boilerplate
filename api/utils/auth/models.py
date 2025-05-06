@@ -23,8 +23,8 @@ class OTPBase(models.Model):
     class Meta:
         abstract = True
 
-    otp_secret = models.CharField(max_length=32)
-    verified = models.BooleanField(default=False)
+    otp_secret = models.CharField(_('otp secret'), max_length=32)
+    verified = models.BooleanField(_('verified'), default=False)
 
     def generate(self):
         if not self.otp_secret:
