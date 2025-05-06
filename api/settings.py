@@ -37,9 +37,9 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 ENVIRONMENT = config('ENVIRONMENT', default=ENVIRONMENT_UNITTEST)
 
 # Feature flags
-DISABLE_S3_DO_STORAGE = config('DISABLE_S3_DO_STORAGE', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT))
-DISABLE_CORS = config('DISABLE_CORS', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT))
-DISABLE_CSRF = config('DISABLE_CSRF', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT))
+DISABLE_S3_DO_STORAGE = config('DISABLE_S3_DO_STORAGE', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT), cast=bool)
+DISABLE_CORS = config('DISABLE_CORS', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT), cast=bool)
+DISABLE_CSRF = config('DISABLE_CSRF', default=ENVIRONMENT in (ENVIRONMENT_UNITTEST, ENVIRONMENT_DEVELOPMENT), cast=bool)
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -182,10 +182,16 @@ if DISABLE_S3_DO_STORAGE:
     MEDIA_ROOT = BASE_DIR / 'mediafiles'
 else:
     STATIC_URL = '%s/%s/' % (AWS_S3_ENDPOINT_URL, STATIC_LOCATION)
-    STATICFILES_STORAGE = 'api.utils.storage.StaticStorage'
-
     MEDIA_URL = '%s/%s/' % (AWS_S3_ENDPOINT_URL, MEDIA_LOCATION)
-    DEFAULT_FILE_STORAGE = 'api.utils.storage.MediaStorage'
+
+    STORAGES = {
+        'default': {
+            'BACKEND': 'api.utils.storage.MediaStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'api.utils.storage.StaticStorage',
+        },
+    }
 
 # STATICFILES_DIRS = (BASE_DIR / 'static', )
 
