@@ -22,6 +22,7 @@ boto3 = "*"
 gunicorn = "*"
 django-cors-headers = "*"
 mock = "*"
+pyotp = "*"
 
 [dev-packages]
 coverage = "*"
