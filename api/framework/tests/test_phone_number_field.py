@@ -1,6 +1,7 @@
 import mock
 from django.test import TestCase
 from rest_framework.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from api.framework.phone_numbers import InvalidPhoneNumber
 from api.framework.serializers import PhoneNumberField
@@ -19,10 +20,10 @@ class TestPhoneNumberField(TestCase):
     def test_to_internal_value_fail(self, mock_phone_number):
         with self.assertRaises(ValidationError) as e:
             self.field.to_internal_value('invalid')
-        self.assertEqual(e.exception.detail, ['"invalid" is not a valid phone number.'])
+        self.assertEqual(e.exception.detail, [_('"{value}" is not a valid phone number.').format(value='invalid')])
 
     @mock.patch('api.framework.serializers.PhoneNumber.is_valid', return_value=False)
     def test_to_internal_value_invalid(self, mock_is_valid):
         with self.assertRaises(ValidationError) as e:
             self.field.to_internal_value('+1 (123) 456-7890')
-        self.assertEqual(e.exception.detail, ['"+1 (123) 456-7890" is not a valid phone number.'])
+        self.assertEqual(e.exception.detail, [_('"{value}" is not a valid phone number.').format(value='+1 (123) 456-7890')])
