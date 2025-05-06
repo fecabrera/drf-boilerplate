@@ -13,7 +13,6 @@ def get_object_or_404(queryset, *filter_args, **filter_kwargs):
         raise Http404
 
 
-
 class GenericAPIView(GenericAPIView):
     query_params_serializer_class = None
 
@@ -51,8 +50,9 @@ class GenericAPIView(GenericAPIView):
         deserializing input, and for serializing output.
         """
         serializer_class = self.get_query_params_serializer_class()
-        kwargs.setdefault('context', self.get_serializer_context())
-        return serializer_class(*args, **kwargs)
+        if serializer_class is not None:
+            kwargs.setdefault('context', self.get_serializer_context())
+            return serializer_class(*args, **kwargs)
 
     def get_query_params_serializer_class(self):
         """
@@ -64,10 +64,5 @@ class GenericAPIView(GenericAPIView):
 
         (Eg. admins get full serialization, others get basic serialization)
         """
-        assert self.query_params_serializer_class is not None, (
-            "'%s' should either include a `query_params_serializer_class` attribute, "
-            "or override the `get_query_params_serializer_class()` method."
-            % self.__class__.__name__
-        )
-
-        return self.query_params_serializer_class
+        if self.query_params_serializer_class is not None:
+            return self.query_params_serializer_class
