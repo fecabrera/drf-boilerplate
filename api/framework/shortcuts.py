@@ -1,4 +1,4 @@
-from django.shortcuts import *  # noqa: F401
+from django.shortcuts import *  # noqa
 from django.utils.translation import gettext_lazy as _
 
 
