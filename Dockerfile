@@ -1,13 +1,13 @@
 FROM python:3.12 AS base
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 # installs postgresql-client
 RUN apt-get update && apt-get install -y wget lsb-release gnupg
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN echo "deb https://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
-RUN apt-get update && apt-get install -y postgresql-client-14
+RUN apt-get update && apt-get install -y postgresql-client-14 gettext
 
 FROM base
 
