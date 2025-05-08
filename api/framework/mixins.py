@@ -1,7 +1,7 @@
 from rest_framework.mixins import *  # noqa
 
 
-class ListModelMixin:
+class ListModelMixin(ListModelMixin):
     """
     List a queryset.
     """
@@ -12,12 +12,4 @@ class ListModelMixin:
 
         self.query_params = query_params and query_params.validated_data
 
-        queryset = self.filter_queryset(self.get_queryset())
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return super().list(request, *args, **kwargs)
