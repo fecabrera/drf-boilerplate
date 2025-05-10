@@ -1,0 +1,56 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - main # Triggers the workflow on pushes to the main branch
+  pull_request: # Triggers the workflow on pull requests
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: admin
+      POSTGRES_DB: data
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+
+    container:
+      image: python:3.12
+
+    services:
+      db:
+        image: postgres:14
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up base environment
+      run: |
+        # Update package lists
+        apt-get update && apt-get install -y wget lsb-release gnupg
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+        echo "deb https://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+        
+        # Install PostgreSQL client and gettext
+        apt-get update && apt-get install -y postgresql-client-14 gettext
+        
+    - name: Install Python dependencies
+      run: |
+        pip install pipenv
+        pipenv install --dev --deploy --system
+
+    - name: Run tests with coverage
+      run: |
+        python -m coverage run manage.py test
+        python -m coverage report
