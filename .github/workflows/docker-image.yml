@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: admin
+      POSTGRES_DB: data
+
     container:
       image: python:3.12
 
@@ -17,8 +21,13 @@ jobs:
         image: postgres:14
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_USER: admin
-          POSTGRES_DB: data
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - name: Checkout repository
@@ -36,17 +45,10 @@ jobs:
         
     - name: Install Python dependencies
       run: |
-        # Install and configure pipenv
         pip install pipenv
-
-        # Install project dependencies
         pipenv install --dev --deploy --system
 
     - name: Run tests with coverage
       run: |
-        # set up environment variables
-        export DATABASE_URL=postgres://admin:@db:5432/data
-        
-        # Run tests with coverage
-        coverage run manage.py test
+        python -m coverage run manage.py test
         python -m coverage report
