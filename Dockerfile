@@ -25,6 +25,4 @@ USER appuser
 
 COPY --chown=appuser:appuser . .
 
-RUN django-admin compilemessages
-
 CMD ["gunicorn", "--worker-tmp-dir", "/dev/shm", "api.wsgi"]
