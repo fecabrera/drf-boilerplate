@@ -19,6 +19,9 @@ jobs:
         with:
           context: .
           file: Dockerfile
+
+      - name: Run tests with coverage
+        run: docker run --rm $(docker image ls -q) pipenv install --dev --deploy --system
       
       - name: Run tests with coverage
         run: docker run --rm $(docker image ls -q) coverage run manage.py test
