@@ -3,11 +3,11 @@ name: Docker Image CI
 on:
   push:
     branches:
-      - main # Triggers the workflow on pushes to the main branch
-  pull_request: # Triggers the workflow on pull requests
+      - main
+  pull_request:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     env:
       POSTGRES_USER: admin
@@ -54,3 +54,18 @@ jobs:
       run: |
         python -m coverage run manage.py test
         python -m coverage report
+
+  build-docker:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v6.16.0
+      with:
+        context: .
+        file: Dockerfile
+        tags: app-test:${{ github.sha }}
