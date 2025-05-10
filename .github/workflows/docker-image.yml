@@ -12,6 +12,14 @@ jobs:
     container:
       image: python:3.12
 
+    services:
+      db:
+        image: postgres:14
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_USER: admin
+          POSTGRES_DB: data
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
