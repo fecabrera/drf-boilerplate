@@ -39,6 +39,10 @@ class TestAPIView(TestCase):
         mock_get_serializer_context.assert_called_once()
         self.serializer_class.assert_called_once_with(*args, context={'context': 'value'}, **kwargs)
 
+    def test_get_query_params_serializer_class_w_no_query_params_serializer_class(self):
+        with self.assertRaises(AssertionError):
+            self.view.get_query_params_serializer_class()
+
     def test_get_query_params_serializer_class(self):
         self.view.query_params_serializer_class = 'serializer_class'
 
