@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - main # Triggers the workflow on pushes to the main branch
+  pull_request: # Triggers the workflow on pull requests
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Build the Docker image
+        uses: docker/build-push-action@v6.16.0
+        with:
+          context: .
+          file: Dockerfile
+      
+      - name: Run tests with coverage
+        run: docker run --rm $(docker image ls -q) coverage run manage.py test
+      
+      - name: Run coverage report
+        run: docker run --rm $(docker image ls -q) coverage report
