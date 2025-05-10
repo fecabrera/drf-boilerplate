@@ -12,6 +12,8 @@ jobs:
     env:
       POSTGRES_USER: admin
       POSTGRES_DB: data
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
 
     container:
       image: python:3.12
