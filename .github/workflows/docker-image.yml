@@ -28,5 +28,5 @@ jobs:
 
     - name: Run tests with coverage report
       run: |
-        docker run --user root --rm app-test:${{ github.sha }} coverage run manage.py test
-        docker run --user root --rm app-test:${{ github.sha }} coverage report
+        docker run --user root --rm app-test:${{ github.sha }} python -m coverage run manage.py test
+        docker run --user root --rm app-test:${{ github.sha }} python -m coverage report
