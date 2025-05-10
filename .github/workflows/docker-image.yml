@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE: app-test:${{ github.sha }}
 
     steps:
     - name: Checkout repository
@@ -19,14 +21,17 @@ jobs:
       with:
         context: .
         file: Dockerfile
-        tags: app-test:${{ github.sha }}
+        tags: ${{ env.DOCKER_IMAGE }}
 
-    # Testing and coverage steps
     - name: Install dev dependencies
       run: |
-        docker run --user root --rm app-test:${{ github.sha }} sudo pip install coverage
+        docker run --rm \
+            ${{ env.DOCKER_IMAGE }} \
+            pip install coverage
 
-    - name: Run tests with coverage report
+    - name: Run tests with coverage
       run: |
-        docker run --user root --rm app-test:${{ github.sha }} python -m coverage run manage.py test
-        docker run --user root --rm app-test:${{ github.sha }} python -m coverage report
+        docker run --rm \
+            -v ${{ github.workspace }}:/home/appuser \
+            ${{ env.DOCKER_IMAGE }} \
+            /bin/bash -c "python -m coverage run manage.py test && python -m coverage report"
