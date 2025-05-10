@@ -25,13 +25,13 @@ jobs:
 
     - name: Install dev dependencies
       run: |
-        docker run --rm \
+        docker run --user root --rm \
             ${{ env.DOCKER_IMAGE }} \
             pip install coverage
 
     - name: Run tests with coverage
       run: |
-        docker run --rm \
+        docker run --user root --rm \
             -v ${{ github.workspace }}:/home/appuser \
             ${{ env.DOCKER_IMAGE }} \
             /bin/bash -c "python -m coverage run manage.py test && python -m coverage report"
