@@ -44,5 +44,9 @@ jobs:
 
     - name: Run tests with coverage
       run: |
+        # set up environment variables
+        export DATABASE_URL=postgres://admin:@db:5432/data
+        
+        # Run tests with coverage
         coverage run manage.py test
         python -m coverage report
