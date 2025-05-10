@@ -11,20 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Build the Docker image
-        uses: docker/build-push-action@v6.16.0
-        with:
-          context: .
-          file: Dockerfile
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Run tests with coverage
-        run: docker run --rm $(docker image ls -q) pipenv install --dev --deploy --system
-      
-      - name: Run tests with coverage
-        run: docker run --rm $(docker image ls -q) coverage run manage.py test
-      
-      - name: Run coverage report
-        run: docker run --rm $(docker image ls -q) coverage report
+    - name: Build Docker image
+      uses: docker/build-push-action@v6.16.0
+      with:
+        context: .
+        file: Dockerfile
+        tags: app-test:${{ github.sha }}
+
+    # Testing and coverage steps
+    - name: Run tests with coverage report
+      run: |
+        docker run --rm app-test:${{ github.sha }} pipenv install --dev --deploy --system
+        docker run --rm app-test:${{ github.sha }} coverage run manage.py test
+        docker run --rm app-test:${{ github.sha }} coverage report
