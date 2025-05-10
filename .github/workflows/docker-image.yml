@@ -24,9 +24,9 @@ jobs:
     # Testing and coverage steps
     - name: Install dev dependencies
       run: |
-        docker run --rm app-test:${{ github.sha }} pip install coverage
+        docker run --user root --rm app-test:${{ github.sha }} pipenv install --dev --deploy --system
 
     - name: Run tests with coverage report
       run: |
-        docker run --rm app-test:${{ github.sha }} python -m coverage run manage.py test
-        docker run --rm app-test:${{ github.sha }} python -m coverage report
+        docker run --user root --rm app-test:${{ github.sha }} coverage run manage.py test
+        docker run --user root --rm app-test:${{ github.sha }} coverage report
