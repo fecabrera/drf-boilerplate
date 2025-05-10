@@ -9,29 +9,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_IMAGE: app-test:${{ github.sha }}
+    container:
+      image: python:3.12
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Build Docker image
-      uses: docker/build-push-action@v6.16.0
-      with:
-        context: .
-        file: Dockerfile
-        tags: ${{ env.DOCKER_IMAGE }}
-
-    - name: Install dev dependencies
+    - name: Set up base environment
       run: |
-        docker run --user root --rm \
-            ${{ env.DOCKER_IMAGE }} \
-            pip install coverage
+        # Update package lists
+        apt-get update && apt-get install -y wget lsb-release gnupg
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+        echo "deb https://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+        
+        # Install PostgreSQL client and gettext
+        apt-get update && apt-get install -y postgresql-client-14 gettext
+        
+    - name: Install Python dependencies
+      run: |
+        # Install and configure pipenv
+        pip install pipenv
+
+        # Install project dependencies
+        pipenv install --dev --deploy --system
 
     - name: Run tests with coverage
       run: |
-        docker run --user root --rm \
-            -v ${{ github.workspace }}:/home/appuser \
-            ${{ env.DOCKER_IMAGE }} \
-            /bin/bash -c "python -m coverage run manage.py test && python -m coverage report"
+        coverage run manage.py test
+        python -m coverage report
