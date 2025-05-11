@@ -1,4 +1,3 @@
-from django.db.models import QuerySet
 from rest_framework.views import *  # noqa
 
 
