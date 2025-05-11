@@ -23,21 +23,27 @@ class OTPBase(models.Model):
     class Meta:
         abstract = True
 
+    TOTP_INTERVAL = None
+
     otp_secret = models.CharField(_('otp secret'), max_length=32)
     verified = models.BooleanField(_('verified'), default=False)
 
     def generate(self):
+        assert self.TOTP_INTERVAL is not None, _('`{value}` must be set').format(value='TOTP_INTERVAL')
+
         if not self.otp_secret:
             self.otp_secret = pyotp.random_base32()
 
         self.verified = False
         self.save()
 
-        totp = pyotp.TOTP(self.otp_secret, interval=300)
+        totp = pyotp.TOTP(self.otp_secret, interval=self.TOTP_INTERVAL)
         return totp.now()
 
     def verify(self, otp_code):
-        totp = pyotp.TOTP(self.otp_secret, interval=300)
+        assert self.TOTP_INTERVAL is not None, _('`{value}` must be set').format(value='TOTP_INTERVAL')
+
+        totp = pyotp.TOTP(self.otp_secret, interval=self.TOTP_INTERVAL)
         verified = totp.verify(otp_code, valid_window=1)
         self.verified = verified
         self.save()
