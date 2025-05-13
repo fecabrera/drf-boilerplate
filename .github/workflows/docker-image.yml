@@ -73,8 +73,14 @@ jobs:
 
     - name: Run test suite with coverage
       run: |
+        echo "# Coverage Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
         python -m coverage run manage.py test
-        python -m coverage report
+        echo "```bash" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        python -m coverage report >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "```" >> $GITHUB_STEP_SUMMARY
 
   build:
     runs-on: ubuntu-latest
