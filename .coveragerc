@@ -7,7 +7,6 @@ omit =
     api/asgi.py
     api/wsgi.py
     api/utils/storage.py
-    api/framework/exceptions.py
 [report]
 fail_under = 90
 skip_covered = True
