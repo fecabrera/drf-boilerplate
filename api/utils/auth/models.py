@@ -19,7 +19,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):  # pragma: no cover
         abstract = True
 
 
-class OTPBase(models.Model):
+class OTPBase(models.Model):  # pragma: no cover
     class Meta:
         abstract = True
 
