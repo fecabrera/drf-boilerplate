@@ -56,15 +56,6 @@ DATABASES = {
         'TEST': {
             'NAME': config('POSTGRES_TEST_DB', default=DB_CONFIG.get('name', 'test')),
         },
-        'LOGGING': {
-            'version': 1,
-            'loggers': {
-                'djongo': {
-                    'level': 'DEBUG',
-                    'propagate': False,
-                }
-            },
-        },
     }
 }
 
