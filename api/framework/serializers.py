@@ -55,3 +55,8 @@ class PhoneNumberField(CharField):
                 return number.cleaned()
 
             self.fail('invalid', value=data)
+
+
+class ChoiceDisplayField(ChoiceField):
+    def to_representation(self, obj):
+        return self._choices[obj]
