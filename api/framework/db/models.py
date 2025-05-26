@@ -5,6 +5,12 @@ class Model(Model):
     class Meta:
         abstract = True
 
+    class ValidationError(Exception):
+        """
+        Raised when an error occurs during the creation of an availability.
+        """
+        pass
+
     def is_valid(self, raise_exception: bool = False):
         """
         Determines whether the current instance or configuration is valid.
