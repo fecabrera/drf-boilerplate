@@ -39,7 +39,7 @@ class TestHandleStateTransition(TestCase):
         mock_obj.transition_method.assert_not_called()
         mock_obj.save.assert_not_called()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data, {'error': "Transition failed."})
+        self.assertEqual(response.data, {'detail': "Transition failed."})
 
     @mock.patch('api.utils.fsm_field.can_proceed', return_value=True)
     def test_handle_state_transition_with_args_and_kwargs(self, mock_can_proceed):

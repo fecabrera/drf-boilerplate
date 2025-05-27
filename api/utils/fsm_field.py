@@ -32,7 +32,7 @@ def handle_state_transition(obj, transition_name: str, error_message: str, succe
     transition_method = getattr(obj, transition_name)
 
     if not can_proceed(transition_method):
-        return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
     transition_method(*args, **kwargs)
     obj.save()
