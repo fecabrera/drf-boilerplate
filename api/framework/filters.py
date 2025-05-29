@@ -34,3 +34,14 @@ class GenericFilterBackend(filters.BaseFilterBackend):
         lookup_value = self.get_lookup_value(request=request, view=view)
         return self.apply_filter(queryset, lookup_field, lookup_expr, lookup_value)
 
+
+class QueryParamFilterBackend(GenericFilterBackend):
+    def get_lookup_value(self, request, view):
+        return view.query_params.get(self.lookup_value)
+
+    def apply_filter(self, queryset, lookup_field, lookup_expr, lookup_value):
+        if lookup_value is not None:
+            queryset = super().apply_filter(queryset, lookup_field, lookup_expr, lookup_value)
+
+        return queryset
+
