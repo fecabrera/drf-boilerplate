@@ -13,6 +13,33 @@ class TestGenericFilterBackend(TestCase):
         self.queryset = MagicMock(spec=QuerySet)
         self.filter = GenericFilterBackend()
 
+    def test_get_lookup_field_null(self):
+        lookup_field = self.filter.get_lookup_field()
+        self.assertEqual(lookup_field, None)
+
+    def test_get_lookup_field(self):
+        self.filter.lookup_field = 'field'
+        lookup_field = self.filter.get_lookup_field()
+        self.assertEqual(lookup_field, 'field')
+
+    def test_get_lookup_expr_null(self):
+        lookup_expr = self.filter.get_lookup_expr()
+        self.assertEqual(lookup_expr, None)
+
+    def test_get_lookup_expr(self):
+        self.filter.lookup_expr = 'expr'
+        lookup_expr = self.filter.get_lookup_expr()
+        self.assertEqual(lookup_expr, 'expr')
+
+    def test_get_lookup_value_null(self):
+        lookup_value = self.filter.get_lookup_value()
+        self.assertEqual(lookup_value, None)
+
+    def test_get_lookup_value(self):
+        self.filter.lookup_value = 'value'
+        lookup_value = self.filter.get_lookup_value()
+        self.assertEqual(lookup_value, 'value')
+
     def test_get_lookup_kwargs(self):
         lookup_kwargs = self.filter.get_lookup_kwargs(
             lookup_field='field',
@@ -55,6 +82,15 @@ class TestGenericFilterBackend(TestCase):
 
     @mock.patch.object(GenericFilterBackend, 'get_lookup_kwargs')
     def test_apply_filter(self, mock_get_lookup_kwargs):
+        mock_get_lookup_kwargs.return_value = {'key': 'value'}
+
+        self.filter.apply_filter(self.queryset, 'field', 'expr', None)
+
+        self.queryset.filter.assert_called_once_with(key='value')
+        mock_get_lookup_kwargs.assert_called_once_with('field', 'expr', None)
+
+    @mock.patch.object(GenericFilterBackend, 'get_lookup_kwargs')
+    def test_apply_filter_w_lookup_value(self, mock_get_lookup_kwargs):
         mock_get_lookup_kwargs.return_value = {'key': 'value'}
 
         self.filter.apply_filter(self.queryset, 'field', 'expr', 'value')

@@ -37,6 +37,8 @@ class GenericFilterBackend(filters.BaseFilterBackend):
 
 class QueryParamFilterBackend(GenericFilterBackend):
     def get_lookup_value(self, request, view):
+        assert self.lookup_value is not None, _('`{value}` must be set').format(value='lookup_value')
+
         return view.query_params.get(self.lookup_value)
 
     def apply_filter(self, queryset, lookup_field, lookup_expr, lookup_value):
