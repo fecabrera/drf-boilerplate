@@ -1,15 +1,19 @@
 from django.db.models import *  # noqa
-
+from rest_framework.exceptions import APIException
+from rest_framework import status
+from django.utils.translation import gettext_lazy as _
 
 class Model(Model):
     class Meta:
         abstract = True
 
-    class ValidationError(Exception):
+    class ValidationError(APIException):
         """
         Raised when an error occurs during the creation of an availability.
         """
-        pass
+        status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        default_detail = _('An error occurred while validating the model.')
+        default_code = 'validation_error'
 
     def is_valid(self, raise_exception: bool = False):
         """
