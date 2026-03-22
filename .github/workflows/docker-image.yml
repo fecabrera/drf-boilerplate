@@ -53,30 +53,30 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Set up base environment
-        run: |
-          # Install PostgreSQL repository signing key
-          apt-get update && apt-get install -y wget lsb-release gnupg
-          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
-          echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] https://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+    - name: Set up base environment
+      run: |
+        # Install PostgreSQL repository signing key
+        apt-get update && apt-get install -y wget lsb-release gnupg
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
+        echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] https://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+        
+        # Update package lists and install required packages
+        apt-get update && apt-get install -y postgresql-client-14 gettext
+        
+    - name: Set up Python environment
+      run: |
+        pip install pipenv
+        pipenv install --dev --deploy --system
 
-          # Update package lists and install required packages
-          apt-get update && apt-get install -y postgresql-client-14 gettext
-
-      - name: Set up Python environment
-        run: |
-          pip install pipenv
-          pipenv install --dev --deploy --system
-
-      - name: Run test suite with coverage
-        run: |
-          echo "# Coverage Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          python -m coverage run manage.py test
-          python -m coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
+    - name: Run test suite with coverage
+      run: |
+        echo "# Coverage Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        python -m coverage run manage.py test
+        python -m coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
 
   build:
     runs-on: ubuntu-latest
