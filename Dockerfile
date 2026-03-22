@@ -21,8 +21,7 @@ RUN pipenv install --deploy --system
 # sets up a non-root user
 RUN useradd --create-home --shell /bin/bash appuser
 WORKDIR /home/appuser
-USER appuser
 
-COPY --chown=appuser:appuser . .
+USER appuser
 
 CMD ["gunicorn", "--worker-tmp-dir", "/dev/shm", "api.wsgi"]
