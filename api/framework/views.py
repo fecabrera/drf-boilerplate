@@ -16,7 +16,7 @@ class APIView(APIView):
         You may want to override this if you need to provide different
         serializer classes depending on the incoming request.
         """
-        assert self.serializer_class is not None, (
+        assert hasattr(self, 'serializer_class') and getattr(self, 'serializer_class') is not None, (
             "'%s' should either include a `serializer_class` attribute, "
             "or override the `get_serializer_class()` method."
             % self.__class__.__name__
@@ -39,7 +39,7 @@ class APIView(APIView):
 
         (Eg. admins get full serialization, others get basic serialization)
         """
-        assert self.query_params_serializer_class is not None, (
+        assert hasattr(self, 'query_params_serializer_class') and getattr(self, 'query_params_serializer_class') is not None, (
             "'%s' should either include a `query_params_serializer_class` attribute, "
             "or override the `get_query_params_serializer_class()` method."
             % self.__class__.__name__
