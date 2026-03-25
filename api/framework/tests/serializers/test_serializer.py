@@ -3,7 +3,7 @@ from django.test import TestCase
 from api.framework.serializers import Serializer
 
 
-class TestSerializers(TestCase):
+class TestSerializer(TestCase):
     def test_serializer_context_not_provided(self):
         serializer = Serializer()
 
