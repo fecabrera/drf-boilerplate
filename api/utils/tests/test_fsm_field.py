@@ -2,6 +2,7 @@ from unittest import mock
 from unittest.mock import Mock
 from django.test import TestCase
 from api.utils.fsm_field import handle_state_transition
+from api.framework.exceptions import TransitionNotAllowed
 from rest_framework import status
 
 
@@ -29,17 +30,17 @@ class TestHandleStateTransition(TestCase):
         mock_obj = Mock()
         mock_obj.transition_method = Mock()
 
-        response = handle_state_transition(
-            obj=mock_obj,
-            transition_name='transition_method',
-            error_message="Transition failed.",
-            success_message="Transition succeeded."
-        )
-
-        mock_obj.transition_method.assert_not_called()
-        mock_obj.save.assert_not_called()
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data, {'detail': "Transition failed."})
+        with self.assertRaises(TransitionNotAllowed) as e:
+            handle_state_transition(
+                obj=mock_obj,
+                transition_name='transition_method',
+                error_message="Transition failed.",
+                success_message="Transition succeeded."
+            )
+        self.assertEqual(e.exception.get_full_details(), {
+            'code': 'transition_not_allowed',
+            'message': "Transition failed."
+        })
 
     @mock.patch('api.utils.fsm_field.can_proceed', return_value=True)
     def test_handle_state_transition_with_args_and_kwargs(self, mock_can_proceed):

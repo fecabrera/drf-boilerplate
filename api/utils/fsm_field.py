@@ -1,6 +1,7 @@
 from django_fsm import can_proceed
 from rest_framework import status
 from rest_framework.response import Response
+from api.framework.exceptions import TransitionNotAllowed
 
 
 def handle_state_transition(obj, transition_name: str, error_message: str, success_message: str, args: list = None,
@@ -32,7 +33,7 @@ def handle_state_transition(obj, transition_name: str, error_message: str, succe
     transition_method = getattr(obj, transition_name)
 
     if not can_proceed(transition_method):
-        return Response({'detail': error_message}, status=status.HTTP_400_BAD_REQUEST)
+        raise TransitionNotAllowed(error_message)
 
     transition_method(*args, **kwargs)
     obj.save()

@@ -60,3 +60,26 @@ class PhoneNumberField(CharField):
 class ChoiceDisplayField(ChoiceField):
     def to_representation(self, obj):
         return self._choices[obj]
+
+
+class ListSerializer(ListSerializer, RequestMixin):
+    def create(self, validated_data):
+        model_class = self.child.Meta.model
+        results = []
+        errors = []
+        error_count = 0
+        for item in validated_data:
+            try:
+                result = self.child.create(item)
+            except model_class.ValidationError as e:
+                results.append(None)
+                errors.append({'detail': str(e.detail)})
+                error_count += 1
+            else:
+                results.append(result)
+                errors.append(None)
+
+        if error_count > 0:
+            raise model_class.ValidationError(errors)
+
+        return results

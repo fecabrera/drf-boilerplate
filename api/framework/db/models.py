@@ -15,6 +15,25 @@ class Model(Model):
         default_detail = _('An error occurred while validating the model.')
         default_code = 'validation_error'
 
+        def __init__(self, detail=None, code=None):
+            if detail is None:
+                detail = self.default_detail
+            if code is None:
+                code = self.default_code
+            if isinstance(detail, list):
+                # Store list as-is so None slots survive; DRF's _get_error_details
+                # would turn None into the string 'None' via force_str().
+                self.detail = detail
+            else:
+                super().__init__(detail, code)
+
+        def get_full_details(self):
+            if isinstance(self.detail, list):
+                # Return the list directly; items are already plain dicts or None,
+                # not ErrorDetail objects that need code/message extraction.
+                return self.detail
+            return super().get_full_details()
+
     def is_valid(self, raise_exception: bool = False):
         """
         Determines whether the current instance or configuration is valid.
